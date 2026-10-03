@@ -1,0 +1,18 @@
+<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Clipcaps</title><style>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Arial;background:linear-gradient(160deg,#0b1020,#151b2e);color:#fff}
+.wrap{max-width:520px;margin:auto;padding:18px}.hero{padding:22px;border-radius:24px;background:linear-gradient(135deg,#6d5dfc,#9c4dff);box-shadow:0 14px 35px #0005}
+.logo{font-size:24px;font-weight:800}.muted{opacity:.75}.balance{font-size:42px;font-weight:900;margin-top:12px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.card{background:#1b2235;border:1px solid #ffffff12;border-radius:20px;padding:18px}.btn{width:100%;border:0;border-radius:14px;padding:14px;margin-top:10px;font-weight:800;font-size:15px}
+.primary{background:#fff;color:#151827}.dark{background:#29324a;color:#fff}.input{width:100%;padding:13px;border-radius:12px;border:1px solid #ffffff1a;background:#101626;color:#fff;margin-top:8px}
+</style></head><body><div class="wrap">
+<div class="hero"><div class="logo">✨ Clipcaps</div><div class="muted">Earn coins from legitimate rewards</div><div class="balance"><span id="coins">0</span> 🪙</div><div id="bdt">৳0.00</div></div>
+<div class="grid"><div class="card"><b>🎁 Daily</b><p class="muted">Claim from Telegram bot.</p></div><div class="card"><b>👥 Referral</b><p class="muted">Invite friends.</p></div></div>
+<div class="card" style="margin-top:12px"><b>📺 Rewarded Ads</b><p class="muted">Coins are credited only after verified rewarded-ad completion.</p><button class="btn primary" onclick="alert('Connect Monetag official rewarded-ad verification here.')">Watch & Earn</button></div>
+<div class="card" style="margin-top:12px"><b>💵 Withdraw</b><select id="method" class="input"><option>bKash</option><option>Nagad</option></select><input id="number" class="input" placeholder="01XXXXXXXXX"><input id="amount" class="input" type="number" placeholder="Coins"><button class="btn dark" onclick="withdraw()">Submit Request</button></div>
+</div>
+<script>
+const tg=window.Telegram?.WebApp; tg?.ready(); tg?.expand(); const uid=tg?.initDataUnsafe?.user?.id;
+async function load(){if(!uid)return;let r=await fetch('/balance/'+uid);if(!r.ok)return;let d=await r.json();coins.textContent=d.coins;bdt.textContent='৳'+Number(d.value_bdt).toFixed(2)}load();
+async function withdraw(){let r=await fetch('/withdraw',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({user_id:uid,method:method.value,number:number.value,coins:Number(amount.value)})});let d=await r.json();alert(d.ok?'Withdrawal submitted.':(d.detail||'Error'));load()}
+</script></body></html>

@@ -1,0 +1,8 @@
+<!doctype html><html><head><meta charset="utf-8"><title>Clipcaps Admin</title><style>body{font-family:Arial;background:#10131a;color:#fff;padding:20px}.card{background:#1c2230;padding:18px;border-radius:16px;margin:10px 0}button{padding:10px;margin:4px}</style></head><body>
+<h1>Clipcaps Admin</h1><div id="stats" class="card">Loading...</div><div id="rows"></div>
+<script>
+const admin=prompt("Admin ID"); const h={'x-admin-id':admin};
+async function load(){let s=await fetch('/admin/stats',{headers:h}).then(r=>r.json());stats.innerHTML=`Users: ${s.users}<br>Coins: ${s.coins}<br>Pending: ${s.pending}<br>Paid: ৳${s.paid_bdt}`;
+let w=await fetch('/admin/withdrawals',{headers:h}).then(r=>r.json());rows.innerHTML=w.map(x=>`<div class="card">#${x.id} — ${x.method} ${x.number} — ৳${x.amount_bdt} — ${x.status}<br><button onclick="setS(${x.id},'paid')">Mark Paid</button><button onclick="setS(${x.id},'rejected')">Reject</button></div>`).join('')}
+async function setS(id,s){await fetch('/admin/withdrawals/'+id+'/'+s,{method:'POST',headers:h});load()}load();
+</script></body></html>
